@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { prefersReducedMotion } from "@/lib/motion";
 
 const ITEMS = [
   { text: "INV #214 — 22d overdue ", tag: "● 84% further delay", cls: "flag" },
@@ -10,9 +12,30 @@ const ITEMS = [
 
 export function Ticker() {
   const [paused, setPaused] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // Flash each entry as it scrolls into the ticker window — a ledger line landing.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || prefersReducedMotion()) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target as HTMLElement;
+          if (entry.isIntersecting) el.classList.add("lit");
+          else el.classList.remove("lit");
+        });
+      },
+      { root, threshold: 0.98 },
+    );
+    root.querySelectorAll(".ticker-track > span").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
 
   return (
     <div
+      ref={rootRef}
       className={`ticker${paused ? " paused" : ""}`}
       onTouchStart={() => setPaused((p) => !p)}
       aria-label="Live cash-risk signals"
