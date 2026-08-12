@@ -1,17 +1,59 @@
 import { useEffect, useRef, useState } from "react";
 
+import { useMagnetic } from "@/lib/motion";
+import { CountUp } from "./CountUp";
+
 type TabId = "before" | "after";
+
+function TabButton({
+  id,
+  label,
+  active,
+  onSelect,
+  onArrow,
+}: {
+  id: TabId;
+  label: string;
+  active: boolean;
+  onSelect: () => void;
+  onArrow: () => void;
+}) {
+  const ref = useMagnetic<HTMLButtonElement>(4);
+
+  return (
+    <button
+      ref={ref}
+      role="tab"
+      id={`tab-${id}`}
+      aria-selected={active}
+      aria-controls={`panel-${id}`}
+      tabIndex={active ? 0 : -1}
+      className={`demo-tab${active ? " active" : ""}`}
+      onClick={onSelect}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+          e.preventDefault();
+          onArrow();
+        }
+      }}
+    >
+      {label}
+    </button>
+  );
+}
 
 export function DemoTabs() {
   const [tab, setTab] = useState<TabId>("before");
   const [rendered, setRendered] = useState<TabId>("before");
   const [exiting, setExiting] = useState<TabId | null>(null);
+  const [runId, setRunId] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (tab === rendered) return;
     setExiting(rendered);
     setRendered(tab);
+    if (tab === "after") setRunId((n) => n + 1);
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => setExiting(null), 320);
     return () => {
@@ -20,6 +62,7 @@ export function DemoTabs() {
   }, [tab, rendered]);
 
   const stateFor = (id: TabId) => (id === rendered ? "active" : id === exiting ? "exit" : "enter");
+  const afterActive = stateFor("after") === "active";
 
   return (
     <div className="demo-panel">
@@ -30,26 +73,18 @@ export function DemoTabs() {
             ["after", "After — Sparo"],
           ] as const
         ).map(([id, label]) => (
-          <button
+          <TabButton
             key={id}
-            role="tab"
-            id={`tab-${id}`}
-            aria-selected={tab === id}
-            aria-controls={`panel-${id}`}
-            tabIndex={tab === id ? 0 : -1}
-            className={`demo-tab${tab === id ? " active" : ""}`}
-            onClick={() => setTab(id)}
-            onKeyDown={(e) => {
-              if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-                e.preventDefault();
-                const next: TabId = tab === "before" ? "after" : "before";
-                setTab(next);
-                document.getElementById(`tab-${next}`)?.focus();
-              }
+            id={id}
+            label={label}
+            active={tab === id}
+            onSelect={() => setTab(id)}
+            onArrow={() => {
+              const next: TabId = tab === "before" ? "after" : "before";
+              setTab(next);
+              document.getElementById(`tab-${next}`)?.focus();
             }}
-          >
-            {label}
-          </button>
+          />
         ))}
       </div>
       <div className="demo-body">
@@ -89,7 +124,7 @@ export function DemoTabs() {
           aria-labelledby="tab-after"
           hidden={stateFor("after") === "enter"}
         >
-          <div className="insight-list">
+          <div key={runId} className={`insight-list${afterActive ? " surfacing" : ""}`}>
             <div className="insight">
               <span className="pct">78%</span>
               <span className="desc">Winter Shawls — sales velocity down 60% in 8 weeks</span>
@@ -109,7 +144,13 @@ export function DemoTabs() {
             </div>
             <div className="cash-total">
               <span className="label">Combined cash at risk, this month</span>
-              <span className="val">₹4.2L</span>
+              <span className="val">
+                {afterActive ? (
+                  <CountUp value={4.2} prefix="₹" suffix="L" decimals={1} duration={800} />
+                ) : (
+                  "₹4.2L"
+                )}
+              </span>
             </div>
           </div>
         </div>
