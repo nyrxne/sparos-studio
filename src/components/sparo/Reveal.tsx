@@ -1,6 +1,18 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-export function Reveal({ children }: { children: ReactNode }) {
+/**
+ * `prose` fades up soft and slow; `data` arrives sharper and faster, for
+ * numeric/data-heavy blocks.
+ */
+export function Reveal({
+  children,
+  variant = "prose",
+  bare = false,
+}: {
+  children: ReactNode;
+  variant?: "prose" | "data";
+  bare?: boolean;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
 
@@ -23,7 +35,10 @@ export function Reveal({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div ref={ref} className={`wrap reveal${inView ? " in" : ""}`}>
+    <div
+      ref={ref}
+      className={`${bare ? "" : "wrap "}reveal reveal-${variant}${inView ? " in" : ""}`}
+    >
       {children}
     </div>
   );
