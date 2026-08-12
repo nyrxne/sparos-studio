@@ -173,6 +173,11 @@ body.sparo{
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}
   .sparo *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  .cursor-dot{display:none;}
+  .thread-fill{transform:scaleY(1) !important;}
+  .stamp.stamp-pending{opacity:1;transform:rotate(-8deg) scale(1);}
+  .insight-list.surfacing .insight{opacity:1;transform:none;}
+  .reveal-data{opacity:1;transform:none;}
 }
 .sparo a{color:inherit;text-decoration:none;}
 .sparo .wrap{max-width:1080px;margin:0 auto;padding:0 32px;}
@@ -456,6 +461,89 @@ body.sparo{
 .cta-confirm .c-sub{font-family:var(--mono);font-size:12px;opacity:0.65;margin-top:8px;}
 .cta-note{font-family:var(--mono);font-size:11.5px;opacity:0.5;margin-top:16px;}
 .cta-note.error{color:var(--thread);opacity:1;}
+
+/* =========================================================
+   MOTION PASS — cursor, thread fill, stamps, ticker, reveal
+   ========================================================= */
+
+/* CUSTOM CURSOR */
+.cursor-dot{
+  position:fixed;top:0;left:0;z-index:9999;pointer-events:none;
+  transform:translate3d(-100px,-100px,0);
+  transition:opacity .2s ease;
+}
+.cursor-dot .cd-core{
+  position:absolute;top:-3px;left:-3px;width:6px;height:6px;
+  border-radius:50%;background:var(--marigold);
+  transform:translate(-50%,-50%);
+}
+.cursor-dot .cd-ring{
+  position:absolute;top:0;left:0;width:32px;height:32px;margin:-16px 0 0 -16px;
+  border:1px solid var(--marigold);border-radius:50%;
+  opacity:0;transform:scale(0.6);
+  transition:opacity .25s ease, transform .25s ease;
+}
+.cursor-dot.on .cd-ring{opacity:0.6;transform:scale(1);}
+.cursor-dot.on .cd-core{transform:translate(-50%,-50%) scale(1.4);}
+body.cursor-dot-on .sparo a,
+body.cursor-dot-on .sparo button,
+body.cursor-dot-on .sparo .price-card,
+body.cursor-dot-on .sparo .calc-action,
+body.cursor-dot-on .sparo .demo-tab,
+body.cursor-dot-on .sparo input[type="checkbox"],
+body.cursor-dot-on .sparo input[type="range"]{cursor:none;}
+
+/* THREAD FILL */
+.thread{position:relative;}
+.thread-fill{
+  position:absolute;left:0;top:0;bottom:0;width:100%;
+  background-image:linear-gradient(var(--marigold) 0 8px, transparent 8px 16px);
+  background-size:1px 16px;
+  transform-origin:top center;
+  opacity:0.7;
+}
+
+/* STAMP OVERSHOOT */
+.stamp.stamp-pending{
+  opacity:0;transform:rotate(-8deg) scale(1.4);
+  transition:opacity .3s ease, transform .3s cubic-bezier(.2,1.5,.4,1);
+}
+.stamp.stamped{
+  animation:stamp-hit .42s cubic-bezier(.2,1.6,.35,1) both;
+}
+@keyframes stamp-hit{
+  0%{opacity:0;transform:rotate(-8deg) scale(1.5);}
+  60%{opacity:1;transform:rotate(-8deg) scale(0.92);}
+  100%{opacity:1;transform:rotate(-8deg) scale(1);}
+}
+
+/* TICKER FLASH */
+.ticker-track span.lit{color:var(--marigold);transition:color .15s ease;}
+
+/* INSIGHT STAGGERED SURFACING */
+.insight-list.surfacing .insight{
+  opacity:0;transform:translateY(16px);
+  animation:insight-rise .5s ease forwards;
+}
+.insight-list.surfacing .insight:nth-child(1){animation-delay:.08s;}
+.insight-list.surfacing .insight:nth-child(2){animation-delay:.18s;}
+.insight-list.surfacing .insight:nth-child(3){animation-delay:.28s;}
+.insight-list.surfacing .cash-total{animation-delay:.4s;}
+@keyframes insight-rise{
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* REVEAL — DATA VARIANT (faster, sharper) */
+.reveal-data{opacity:0;transform:translateY(18px);transition:opacity .4s ease, transform .4s ease;}
+.reveal-data.in{opacity:1;transform:translateY(0);}
+
+/* PRICE CARD PAPER-LIFT */
+.price-card{
+  box-shadow:0 0 0 rgba(0,0,0,0);
+}
+.price-card:hover,.price-card:focus-within{
+  box-shadow:0 12px 40px rgba(0,0,0,0.28);
+}
 
 @media (max-width:720px){
   .sparo .wrap{padding:0 20px;}

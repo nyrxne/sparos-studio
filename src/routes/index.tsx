@@ -1,9 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { Calculator } from "@/components/sparo/Calculator";
+import { CountUp } from "@/components/sparo/CountUp";
+import { CustomCursor } from "@/components/sparo/CustomCursor";
 import { DemoTabs } from "@/components/sparo/DemoTabs";
 import { Reveal } from "@/components/sparo/Reveal";
+import { StampObserver } from "@/components/sparo/StampObserver";
 import { StickyNav } from "@/components/sparo/StickyNav";
+import { ThreadLine } from "@/components/sparo/ThreadLine";
 import { Ticker } from "@/components/sparo/Ticker";
 import { WaitlistForm } from "@/components/sparo/WaitlistForm";
 
@@ -31,7 +35,9 @@ function Index() {
       <a className="skip-link" href="#problem">
         Skip to content
       </a>
-      <div className="thread" aria-hidden="true" />
+      <ThreadLine />
+      <CustomCursor />
+      <StampObserver />
       <StickyNav />
 
       {/* HERO */}
@@ -39,7 +45,7 @@ function Index() {
         <div className="wrap">
           <div className="hero-top">
             <span>Sparo — cash-flow risk, unified</span>
-            <span>Prototype for AI Pitchathon</span>
+            <span>Prototype · 2026</span>
           </div>
           <h1>
             Know where your money
@@ -159,7 +165,7 @@ function Index() {
 
       {/* TRY IT */}
       <section id="try">
-        <Reveal>
+        <Reveal variant="data">
           <span className="eyebrow">Try it</span>
           <h2>Put your own numbers in.</h2>
           <p className="lede">
@@ -172,7 +178,7 @@ function Index() {
 
       {/* DEMO */}
       <section id="demo">
-        <Reveal>
+        <Reveal variant="data">
           <span className="eyebrow">Live demo — Meridian Textiles</span>
           <h2>A fictional supplier. A real amount of trapped cash.</h2>
           <p className="lede">
@@ -321,7 +327,7 @@ function Index() {
 
       {/* PRICING */}
       <section id="pricing">
-        <Reveal>
+        <Reveal variant="data">
           <span className="eyebrow">Pricing — illustrative</span>
           <h2>Priced like a decision, not a dashboard.</h2>
           <p className="lede">
@@ -330,7 +336,9 @@ function Index() {
           <div className="pricing-grid">
             <div className="price-card" tabIndex={0}>
               <span className="p-name">Starter</span>
-              <div className="p-price">₹999</div>
+              <div className="p-price">
+                <CountUp value={999} prefix="₹" duration={900} />
+              </div>
               <div className="p-unit">
                 per month
                 <br />
@@ -345,7 +353,9 @@ function Index() {
             <div className="price-card featured" tabIndex={0}>
               <span className="p-badge">Most common at pilot stage</span>
               <span className="p-name">Growth</span>
-              <div className="p-price">₹2,999</div>
+              <div className="p-price">
+                <CountUp value={2999} prefix="₹" duration={900} />
+              </div>
               <div className="p-unit">
                 per month
                 <br />
@@ -360,7 +370,9 @@ function Index() {
             </div>
             <div className="price-card" tabIndex={0}>
               <span className="p-name">Multi-location</span>
-              <div className="p-price">₹7,999</div>
+              <div className="p-price">
+                <CountUp value={7999} prefix="₹" duration={900} />
+              </div>
               <div className="p-unit">
                 per month
                 <br />
@@ -389,7 +401,7 @@ function Index() {
           <p className="tag-line">It tells you where it's hiding — before it's gone.</p>
           <WaitlistForm />
           <div className="team-strip">
-            <span>Team of 3 · AI Pitchathon 2026</span>
+            <span>Team of 3 · 2026</span>
           </div>
         </Reveal>
       </section>

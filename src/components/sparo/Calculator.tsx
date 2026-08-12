@@ -1,23 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 
+import { prefersReducedMotion, useInView } from "@/lib/motion";
+
 function formatINR(n: number) {
   return "₹" + Math.round(n).toLocaleString("en-IN");
 }
 
-function prefersReducedMotion() {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
 /** Animates a number toward `target` with easing, and flags a pulse on change. */
-function useAnimatedNumber(target: number) {
-  const [display, setDisplay] = useState(target);
+function useAnimatedNumber(target: number, inView: boolean) {
+  const [display, setDisplay] = useState(0);
   const [pulse, setPulse] = useState(false);
-  const fromRef = useRef(target);
+  const fromRef = useRef(0);
   const rafRef = useRef<number | null>(null);
   const pulseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    if (!inView) return;
     if (prefersReducedMotion()) {
       setDisplay(target);
       return;
@@ -45,7 +43,7 @@ function useAnimatedNumber(target: number) {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [target]);
+  }, [target, inView]);
 
   return { display, pulse };
 }
@@ -56,14 +54,16 @@ export function Calculator() {
   const [chase, setChase] = useState(false);
   const [discount, setDiscount] = useState(false);
 
+  const { ref, inView } = useInView<HTMLDivElement>(0.3);
+
   const trapped = invoices + inventory;
   const released = (chase ? invoices * 0.6 : 0) + (discount ? inventory * 0.7 : 0);
 
-  const trappedAnim = useAnimatedNumber(trapped);
-  const releasedAnim = useAnimatedNumber(released);
+  const trappedAnim = useAnimatedNumber(trapped, inView);
+  const releasedAnim = useAnimatedNumber(released, inView);
 
   return (
-    <div className="calc-panel">
+    <div className="calc-panel" ref={ref}>
       <div className="calc-grid">
         <div>
           <div className="calc-input">

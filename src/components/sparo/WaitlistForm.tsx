@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useMagnetic } from "@/lib/motion";
 
 type Status = "idle" | "loading" | "error" | "done";
 
@@ -9,6 +10,7 @@ export function WaitlistForm() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("Pilot cohort — Delhi NCR, this quarter. No spam, ever.");
+  const submitRef = useMagnetic<HTMLButtonElement>(5);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -87,7 +89,7 @@ export function WaitlistForm() {
           inputMode="email"
           required
         />
-        <button type="submit" disabled={status === "loading"}>
+        <button ref={submitRef} type="submit" disabled={status === "loading"}>
           {status === "loading" ? "Sending…" : "Get early access"}
         </button>
       </form>
