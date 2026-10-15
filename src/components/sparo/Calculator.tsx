@@ -57,11 +57,11 @@ export function Calculator() {
   const [chase, setChase] = useState(true);
   const [discount, setDiscount] = useState(true);
 
-  const trapped = invoices + inventory;
-  const released = (chase ? invoices * 0.6 : 0) + (discount ? inventory * 0.7 : 0);
+  const atRisk = invoices + inventory;
+  const scenarioValue = (chase ? invoices * 0.6 : 0) + (discount ? inventory * 0.7 : 0);
 
-  const trappedAnim = useAnimatedNumber(trapped);
-  const releasedAnim = useAnimatedNumber(released);
+  const atRiskAnim = useAnimatedNumber(atRisk);
+  const scenarioAnim = useAnimatedNumber(scenarioValue);
 
   return (
     <div className="calc-panel">
@@ -75,7 +75,7 @@ export function Calculator() {
             <input
               type="range"
               id="invSlider"
-              min={0}
+              min={10000}
               max={1000000}
               step={10000}
               value={invoices}
@@ -92,7 +92,7 @@ export function Calculator() {
             <input
               type="range"
               id="invtSlider"
-              min={0}
+              min={10000}
               max={1000000}
               step={10000}
               value={inventory}
@@ -107,7 +107,9 @@ export function Calculator() {
             <input type="checkbox" checked={chase} onChange={(e) => setChase(e.target.checked)} />
             <div>
               <div className="a-title">Prioritize the highest-risk overdue invoices</div>
-              <div className="a-sub">Demo assumes 60% recovery — Sparo's real model predicts this per buyer</div>
+              <div className="a-sub">
+                Illustrative scenario only — a future model would estimate this per buyer
+              </div>
             </div>
           </label>
           <label className={`calc-action${discount ? " selected" : ""}`}>
@@ -118,32 +120,35 @@ export function Calculator() {
             />
             <div>
               <div className="a-title">Discount the slowest-moving stock first</div>
-              <div className="a-sub">Demo assumes 70% conversion — Sparo's real model predicts this per SKU</div>
+              <div className="a-sub">
+                Illustrative scenario only — a future model would estimate this per SKU
+              </div>
             </div>
           </label>
         </div>
       </div>
       <div className="calc-result">
         <div className="r-block trapped">
-          <div className="r-label">Cash trapped today</div>
-          <div className={`r-val${trappedAnim.pulse ? " pulse" : ""}`} aria-hidden="true">
-            {formatINR(trappedAnim.display)}
+          <div className="r-label">Cash in selected signals</div>
+          <div className={`r-val${atRiskAnim.pulse ? " pulse" : ""}`} aria-hidden="true">
+            {formatINR(atRiskAnim.display)}
           </div>
         </div>
         <div className="r-block released">
-          <div className="r-label">Cash you could free up</div>
-          <div className={`r-val${releasedAnim.pulse ? " pulse" : ""}`} aria-hidden="true">
-            {formatINR(releasedAnim.display)}
+          <div className="r-label">Illustrative scenario value</div>
+          <div className={`r-val${scenarioAnim.pulse ? " pulse" : ""}`} aria-hidden="true">
+            {formatINR(scenarioAnim.display)}
           </div>
         </div>
       </div>
       <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-        Cash trapped today: {formatINR(trapped)}. Cash you could free up: {formatINR(released)}.
+        Cash in selected signals: {formatINR(atRisk)}. Illustrative scenario value:{" "}
+        {formatINR(scenarioValue)}.
       </p>
       <p className="calc-note">
         This demo uses flat recovery rates for simplicity. Sparo's actual value is in buyer-specific
-        delay prediction and per-SKU velocity decay — not a fixed percentage. Recovery rates here are
-        illustrative assumptions, not claims about typical results.
+        delay prediction and per-SKU velocity decay — not a fixed percentage. Recovery rates here
+        are illustrative assumptions, not evidence of recovery, conversion, or protection.
       </p>
     </div>
   );

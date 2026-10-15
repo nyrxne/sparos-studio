@@ -13,7 +13,7 @@ import { WaitlistForm } from "@/components/sparo/WaitlistForm";
 
 const TITLE = "Sparo — Know where your money is trapped";
 const DESCRIPTION =
-  "Sparo is a cash-flow risk tool for small Indian businesses: it reads invoices, payments and inventory from Tally and shows owners where cash is stuck, before it becomes a crisis.";
+  "Sparo is a prototype for textile suppliers with receivables and inventory: it combines payment-delay and dead-stock signals to show where cash may be stuck.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,7 +44,7 @@ function Index() {
       <section className="hero">
         <div className="wrap">
           <div className="hero-top">
-            <span>Sparo — cash-flow risk, unified</span>
+            <span>Sparo — cash-flow signals, unified</span>
             <span>Prototype · 2026</span>
           </div>
           <h1>
@@ -122,9 +122,9 @@ function Index() {
               <div>
                 <h3>Delay-risk &amp; dead-stock models</h3>
                 <p>
-                  Learns each buyer's payment pattern and each SKU's velocity decay — not fixed
-                  thresholds, but patterns that differ business to business. Cold-start uses industry
-                  defaults until enough history accumulates.
+                  Designed to learn each buyer's payment pattern and each SKU's velocity decay — not
+                  fixed thresholds, but patterns intended to differ business to business. In this
+                  prototype, cold-start uses industry defaults until enough history accumulates.
                 </p>
                 <span className="tag ai">Genuinely AI</span>
               </div>
@@ -182,8 +182,8 @@ function Index() {
       {/* DEMO */}
       <section id="demo">
         <Reveal variant="data">
-          <span className="eyebrow">Live demo — Meridian Textiles</span>
-          <h2>A fictional supplier. A realistic amount of trapped cash.</h2>
+          <span className="eyebrow">Synthetic demo — Meridian Textiles</span>
+          <h2>A fictional supplier. A transparent example of trapped cash.</h2>
           <p className="lede">
             A small Delhi NCR textile supplier selling to three retail chains, while running its own
             counter. Same data, two views. The "After" view shows synthetic demo data — not a real
@@ -203,8 +203,9 @@ function Index() {
             <div>
               <h3>Large retailers pay MSMEs 28 days slower than they pay large suppliers</h3>
               <p>
-                MSMEs are paid in 73 days on average, compared to 45 days for large suppliers — a
-                28-day gap that is the direct cause of the cash trap Sparo targets.
+                One reported comparison puts MSME payment timing at 73 days on average versus 45
+                days for large suppliers — a 28-day gap that illustrates the receivables pressure
+                Sparo is designed to surface.
               </p>
               <div className="meta">
                 Source: RBI study on MSME receivables · India average · figures rounded
@@ -227,7 +228,8 @@ function Index() {
                 TReDS, the RBI-regulated platform that lets MSMEs discount unpaid invoices for early
                 cash, was made mandatory for more Central Public Sector Enterprises paying MSME
                 suppliers under recent government notifications. Sparo doesn't compete with TReDS —
-                it decides which invoices are worth discounting first, based on predicted delay risk.
+                it decides which invoices are worth discounting first, based on predicted delay
+                risk.
               </p>
               <div className="meta">
                 Source: RBI TReDS framework · specific mandate dates to be confirmed before launch
@@ -276,8 +278,8 @@ function Index() {
             <div>
               <h3>Dead stock is waste before it's a write-off</h3>
               <p>
-                Catching a slow-moving SKU earlier — while it's still sellable at a modest discount —
-                means less product ending in landfill or destroyed inventory, and less fabric
+                Catching a slow-moving SKU earlier — while it's still sellable at a modest discount
+                — means less product ending in landfill or destroyed inventory, and less fabric
                 ordered on top of stock that never should have been reordered.
               </p>
               <div className="meta">
@@ -286,7 +288,7 @@ function Index() {
             </div>
           </div>
           <div className="stamp-block">
-            <div className="stamp">Waste</div>
+            <div className="stamp">Decisions</div>
             <div>
               <h3>Fewer distress decisions</h3>
               <p>
@@ -365,12 +367,18 @@ function Index() {
           <h2>What Sparo is right now — and isn't.</h2>
           <div className="status-list">
             <div className="status-item">
-              <span className="status-label done">Done</span>
-              <p>Predictive models designed and prototyped on synthetic data. Not yet validated on real business data.</p>
+              <span className="status-label done">Prototype</span>
+              <p>
+                Payment-delay and dead-stock logic prototyped on synthetic data. Not yet validated
+                on real business data.
+              </p>
             </div>
             <div className="status-item">
               <span className="status-label planned">Planned</span>
-              <p>Tally integration to pull invoice, payment, and inventory data directly. Manual import today.</p>
+              <p>
+                Tally integration to pull invoice, payment, and inventory data directly. Manual
+                import today.
+              </p>
             </div>
             <div className="status-item">
               <span className="status-label planned">Planned</span>
@@ -378,11 +386,17 @@ function Index() {
             </div>
             <div className="status-item">
               <span className="status-label planned">Planned</span>
-              <p>Validation against real receivables and inventory data, with published accuracy methodology.</p>
+              <p>
+                Validation against real receivables and inventory data, with published accuracy
+                methodology.
+              </p>
             </div>
             <div className="status-item">
               <span className="status-label notyet">Not yet</span>
-              <p>TReDS integration, WhatsApp alerts, AI-drafted reminders, multi-branch consolidation. Roadmap items, not built features.</p>
+              <p>
+                TReDS integration, WhatsApp alerts, AI-drafted reminders, multi-branch
+                consolidation. Roadmap items, not built features.
+              </p>
             </div>
           </div>
         </Reveal>
@@ -427,7 +441,7 @@ function Index() {
                 <li>Everything in Starter</li>
                 <li>WhatsApp cash-risk alerts (roadmap)</li>
                 <li>AI-drafted payment reminders (roadmap)</li>
-                <li>Action simulation — see impact before acting</li>
+                <li>What-if action preview — compare options before acting</li>
               </ul>
             </div>
             <div className="price-card" tabIndex={0}>
@@ -465,9 +479,9 @@ function Index() {
             </div>
           </div>
           <p className="pricing-note">
-            Proposed pricing, not a verified market rate — priced as a fraction of what one recovered
-            invoice or one discounted SKU is worth, not per-seat SaaS logic. To be tested with real
-            pilot customers.
+            Proposed pricing, not a verified market rate — priced as a fraction of what one
+            recovered invoice or one discounted SKU is worth, not per-seat SaaS logic. To be tested
+            with real pilot customers.
           </p>
         </Reveal>
       </section>
