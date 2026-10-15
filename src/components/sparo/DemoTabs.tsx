@@ -135,13 +135,15 @@ export function DemoTabs() {
             </div>
             <div className="insight">
               <span className="pct">HIGH</span>
-              <span className="desc">Invoice #214, Retail Chain B — late on 4 of last 5 orders, 22d overdue</span>
+              <span className="desc">
+                Invoice #214, Retail Chain B — late on 4 of last 5 orders, 22d overdue
+              </span>
               <span className="risk">₹1.45L at risk</span>
             </div>
             <div className="insight">
               <span className="pct">MED</span>
               <span className="desc">
-                Reordering Linen Kurtas now would lock capital not actually available this month
+                Reordering Winter Shawls now would lock capital not actually available this month
               </span>
               <span className="risk">₹95,000 at stake</span>
             </div>

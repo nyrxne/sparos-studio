@@ -112,8 +112,8 @@ export function WaitlistForm() {
         {message}
       </p>
       <p className="privacy-note">
-        We store your email only to contact you about Sparo. No third-party sharing. Request deletion
-        anytime.
+        We store your email only to contact you about Sparo. No third-party sharing. Request
+        deletion anytime.
       </p>
     </>
   );
