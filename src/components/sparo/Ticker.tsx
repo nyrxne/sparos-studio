@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { prefersReducedMotion } from "@/lib/motion";
 
 const ITEMS = [
-  { text: "INV #214 — 22d overdue ", tag: "● 84% further delay", cls: "flag" },
-  { text: "SKU — Winter Shawls ", tag: "● 78% dead-stock risk", cls: "flag" },
+  { text: "INV #214 — 22d overdue ", tag: "● delay risk flagged", cls: "flag" },
+  { text: "SKU — Winter Shawls ", tag: "● dead-stock risk", cls: "flag" },
   { text: "INV #198 — paid on time ", tag: "● buyer reliable", cls: "ok" },
   { text: "SKU — Cotton Sarees ", tag: "● healthy velocity", cls: "ok" },
   { text: "Cash at risk this month ", tag: "● ₹4.2L", cls: "flag" },
@@ -14,7 +14,6 @@ export function Ticker() {
   const [paused, setPaused] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  // Flash each entry as it scrolls into the ticker window — a ledger line landing.
   useEffect(() => {
     const root = rootRef.current;
     if (!root || prefersReducedMotion()) return;
@@ -48,7 +47,17 @@ export function Ticker() {
           </span>
         ))}
       </div>
-      <p className="ticker-hint">Hover or tap to pause</p>
+      <div className="ticker-controls">
+        <button
+          className="ticker-pause"
+          onClick={() => setPaused((p) => !p)}
+          aria-label={paused ? "Resume ticker" : "Pause ticker"}
+          aria-pressed={paused}
+        >
+          {paused ? "Resume" : "Pause"}
+        </button>
+        <p className="ticker-hint">Hover or use the pause button</p>
+      </div>
     </div>
   );
 }

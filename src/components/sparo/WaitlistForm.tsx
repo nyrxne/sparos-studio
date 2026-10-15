@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 type Status = "idle" | "loading" | "error" | "done";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+const DEFAULT_MSG = "We'll contact you before Sparo's pilot begins. No spam, ever.";
 
 export function WaitlistForm() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
-  const [message, setMessage] = useState("Pilot cohort — Delhi NCR, this quarter. No spam, ever.");
+  const [message, setMessage] = useState(DEFAULT_MSG);
   const submitRef = useMagnetic<HTMLButtonElement>(5);
 
   async function onSubmit(e: React.FormEvent) {
@@ -25,7 +26,7 @@ export function WaitlistForm() {
     }
 
     setStatus("loading");
-    setMessage("Pilot cohort — Delhi NCR, this quarter. No spam, ever.");
+    setMessage(DEFAULT_MSG);
 
     try {
       const { error } = await supabase
@@ -55,7 +56,7 @@ export function WaitlistForm() {
       <div className="cta-confirm" role="status" aria-live="polite">
         <div className="c-title">You're on the list.</div>
         <div className="c-sub">
-          We'll reach out at {email.trim().toLowerCase()} before the pilot starts.
+          We'll contact you at {email.trim().toLowerCase()} when Sparo is ready to pilot.
         </div>
       </div>
     );
@@ -81,7 +82,7 @@ export function WaitlistForm() {
             setEmail(e.target.value);
             if (status === "error") {
               setStatus("idle");
-              setMessage("Pilot cohort — Delhi NCR, this quarter. No spam, ever.");
+              setMessage(DEFAULT_MSG);
             }
           }}
           aria-label="Email address"
@@ -91,7 +92,14 @@ export function WaitlistForm() {
           inputMode="email"
           required
         />
-        <Button className="magnetic-cta" variant="ghost" ref={submitRef} type="submit" disabled={status === "loading"} aria-busy={status === "loading"}>
+        <Button
+          className="magnetic-cta"
+          variant="ghost"
+          ref={submitRef}
+          type="submit"
+          disabled={status === "loading"}
+          aria-busy={status === "loading"}
+        >
           {status === "loading" && <span className="cta-spinner" aria-hidden="true" />}
           <span>{status === "loading" ? "Sending…" : "Get early access"}</span>
         </Button>
@@ -102,6 +110,10 @@ export function WaitlistForm() {
         role={status === "error" ? "alert" : undefined}
       >
         {message}
+      </p>
+      <p className="privacy-note">
+        We store your email only to contact you about Sparo. No third-party sharing. Request deletion
+        anytime.
       </p>
     </>
   );

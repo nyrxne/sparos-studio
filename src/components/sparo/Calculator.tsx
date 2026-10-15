@@ -54,8 +54,8 @@ function useAnimatedNumber(target: number) {
 export function Calculator() {
   const [invoices, setInvoices] = useState(200000);
   const [inventory, setInventory] = useState(150000);
-  const [chase, setChase] = useState(false);
-  const [discount, setDiscount] = useState(false);
+  const [chase, setChase] = useState(true);
+  const [discount, setDiscount] = useState(true);
 
   const trapped = invoices + inventory;
   const released = (chase ? invoices * 0.6 : 0) + (discount ? inventory * 0.7 : 0);
@@ -106,8 +106,8 @@ export function Calculator() {
           <label className={`calc-action${chase ? " selected" : ""}`}>
             <input type="checkbox" checked={chase} onChange={(e) => setChase(e.target.checked)} />
             <div>
-              <div className="a-title">Chase the top overdue invoices this week</div>
-              <div className="a-sub">Typically recovers ~60% of what's overdue</div>
+              <div className="a-title">Prioritize the highest-risk overdue invoices</div>
+              <div className="a-sub">Demo assumes 60% recovery — Sparo's real model predicts this per buyer</div>
             </div>
           </label>
           <label className={`calc-action${discount ? " selected" : ""}`}>
@@ -117,8 +117,8 @@ export function Calculator() {
               onChange={(e) => setDiscount(e.target.checked)}
             />
             <div>
-              <div className="a-title">Discount the slowest-moving stock now, not later</div>
-              <div className="a-sub">Typically converts ~70% of trapped inventory to cash</div>
+              <div className="a-title">Discount the slowest-moving stock first</div>
+              <div className="a-sub">Demo assumes 70% conversion — Sparo's real model predicts this per SKU</div>
             </div>
           </label>
         </div>
@@ -131,18 +131,19 @@ export function Calculator() {
           </div>
         </div>
         <div className="r-block released">
-          <div className="r-label">Protected if you act</div>
+          <div className="r-label">Cash you could free up</div>
           <div className={`r-val${releasedAnim.pulse ? " pulse" : ""}`} aria-hidden="true">
             {formatINR(releasedAnim.display)}
           </div>
         </div>
       </div>
       <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-        Cash trapped today: {formatINR(trapped)}. Protected if you act: {formatINR(released)}.
+        Cash trapped today: {formatINR(trapped)}. Cash you could free up: {formatINR(released)}.
       </p>
       <p className="calc-note">
-        Illustrative recovery rates for this demo — not a prediction for any real business. Sparo's
-        actual model learns each buyer's and each SKU's real pattern instead of a fixed percentage.
+        This demo uses flat recovery rates for simplicity. Sparo's actual value is in buyer-specific
+        delay prediction and per-SKU velocity decay — not a fixed percentage. Recovery rates here are
+        illustrative assumptions, not claims about typical results.
       </p>
     </div>
   );

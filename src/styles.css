@@ -421,7 +421,7 @@ body.sparo{
 .calc-note{font-family:var(--mono);font-size:11.5px;opacity:0.5;margin-top:22px;max-width:70ch;}
 
 /* PRICING */
-.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px;}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px;}
 .price-card{
   background:var(--ink);padding:36px 30px;display:flex;flex-direction:column;
   position:relative;transition:transform .28s ease, background .28s ease, outline-color .28s ease;
@@ -436,11 +436,22 @@ body.sparo{
 .price-card .p-badge{font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--marigold);margin-bottom:12px;}
 .price-card .p-name{font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--marigold);opacity:0.85;}
 .price-card .p-price{font-family:var(--display);font-size:38px;margin:14px 0 4px;}
+.price-card .p-custom{font-family:var(--display);font-size:24px;color:var(--marigold);}
 .price-card .p-unit{font-family:var(--mono);font-size:12px;opacity:0.55;margin-bottom:24px;line-height:1.5;}
 .price-card ul{list-style:none;display:flex;flex-direction:column;gap:11px;flex-grow:1;}
 .price-card li{font-size:14px;opacity:0.8;padding-left:18px;position:relative;}
 .price-card li::before{content:"—";position:absolute;left:0;color:var(--marigold);opacity:0.5;}
 .pricing-note{font-family:var(--mono);font-size:11.5px;opacity:0.5;margin-top:22px;max-width:70ch;}
+
+/* HONEST STATUS */
+.status-list{margin-top:48px;display:flex;flex-direction:column;gap:0;}
+.status-item{display:grid;grid-template-columns:120px 1fr;gap:24px;padding:24px 0;border-top:1px solid var(--line);align-items:flex-start;}
+.status-item:last-child{border-bottom:1px solid var(--line);}
+.status-label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:3px;text-align:center;}
+.status-label.done{background:rgba(75,139,123,0.15);color:var(--unlock);}
+.status-label.planned{background:rgba(227,167,59,0.12);color:var(--marigold);}
+.status-label.notyet{background:rgba(168,68,44,0.15);color:var(--thread);}
+.status-item p{font-size:14.5px;opacity:0.8;}
 
 /* CTA FORM */
 .cta-form{display:flex;max-width:440px;margin:40px auto 0;border:1px solid var(--line);transition:border-color .2s;}
@@ -471,6 +482,14 @@ body.sparo{
 .cta-confirm .c-sub{font-family:var(--mono);font-size:12px;opacity:0.65;margin-top:8px;}
 .cta-note{font-family:var(--mono);font-size:11.5px;opacity:0.5;margin-top:16px;}
 .cta-note.error{color:var(--thread);opacity:1;}
+.privacy-note{font-family:var(--mono);font-size:10.5px;opacity:0.4;margin-top:10px;max-width:440px;margin-left:auto;margin-right:auto;}
+.ticker-controls{display:flex;align-items:center;gap:12px;margin-top:8px;}
+.ticker-pause{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  background:none;border:1px solid var(--line);color:var(--paper);padding:4px 12px;
+  cursor:pointer;opacity:0.5;transition:opacity .2s,border-color .2s;
+}
+.ticker-pause:hover,.ticker-pause:focus-visible{opacity:1;border-color:var(--marigold);}
 
 /* =========================================================
    MOTION PASS — cursor, thread fill, stamps, ticker, reveal
@@ -567,6 +586,9 @@ body.cursor-dot-on .sparo input[type="range"]{cursor:none;}
   body.cursor-dot-on .sparo a,body.cursor-dot-on .sparo button,body.cursor-dot-on .sparo .price-card,body.cursor-dot-on .sparo .calc-action,body.cursor-dot-on .sparo input{cursor:auto;}
 }
 
+@media (max-width:960px){
+  .pricing-grid{grid-template-columns:repeat(2,1fr);}
+}
 @media (max-width:720px){
   .sparo .wrap{padding:0 20px;}
   .sparo section{padding:80px 0;}
@@ -584,6 +606,7 @@ body.cursor-dot-on .sparo input[type="range"]{cursor:none;}
   .calc-grid{grid-template-columns:1fr;gap:28px;}
   .calc-panel{padding:28px 20px;}
   .pricing-grid{grid-template-columns:1fr;}
+  .status-item{grid-template-columns:1fr;gap:8px;}
   .cta-form{flex-direction:column;max-width:100%;}
   .cta-form button{padding:14px;}
   .demo-body{padding:26px 20px;}

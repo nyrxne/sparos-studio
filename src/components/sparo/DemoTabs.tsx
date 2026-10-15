@@ -129,19 +129,19 @@ export function DemoTabs() {
         >
           <div key={runId} className={`insight-list${afterActive ? " surfacing" : ""}`}>
             <div className="insight">
-              <span className="pct">78%</span>
-              <span className="desc">Winter Shawls — sales velocity down 60% in 8 weeks</span>
+              <span className="pct">HIGH</span>
+              <span className="desc">Winter Shawls — sales velocity declining steadily</span>
               <span className="risk">₹1.8L trapped</span>
             </div>
             <div className="insight">
-              <span className="pct">84%</span>
-              <span className="desc">Invoice #214, Retail Chain B — late on 4 of last 5 orders</span>
-              <span className="risk">22d overdue</span>
+              <span className="pct">HIGH</span>
+              <span className="desc">Invoice #214, Retail Chain B — late on 4 of last 5 orders, 22d overdue</span>
+              <span className="risk">₹1.45L at risk</span>
             </div>
             <div className="insight">
-              <span className="pct">—</span>
+              <span className="pct">MED</span>
               <span className="desc">
-                Reordering Product Y now would lock capital not actually available this month
+                Reordering Linen Kurtas now would lock capital not actually available this month
               </span>
               <span className="risk">₹95,000 at stake</span>
             </div>
