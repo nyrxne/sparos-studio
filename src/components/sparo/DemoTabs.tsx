@@ -44,22 +44,23 @@ function TabButton({
 
 export function DemoTabs() {
   const [tab, setTab] = useState<TabId>("before");
-  const [rendered, setRendered] = useState<TabId>("before");
+  const rendered = tab;
+  const previous = useRef<TabId>("before");
   const [exiting, setExiting] = useState<TabId | null>(null);
   const [runId, setRunId] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (tab === rendered) return;
-    setExiting(rendered);
-    setRendered(tab);
+    if (tab === previous.current) return;
+    setExiting(previous.current);
+    previous.current = tab;
     if (tab === "after") setRunId((n) => n + 1);
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => setExiting(null), 320);
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
-  }, [tab, rendered]);
+  }, [tab]);
 
   const stateFor = (id: TabId) => (id === rendered ? "active" : id === exiting ? "exit" : "enter");
   const afterActive = stateFor("after") === "active";
@@ -94,6 +95,7 @@ export function DemoTabs() {
           id="panel-before"
           role="tabpanel"
           aria-labelledby="tab-before"
+          aria-hidden={tab !== "before"}
           hidden={stateFor("before") === "enter"}
         >
           <div className="messy">
@@ -122,6 +124,7 @@ export function DemoTabs() {
           id="panel-after"
           role="tabpanel"
           aria-labelledby="tab-after"
+          aria-hidden={tab !== "after"}
           hidden={stateFor("after") === "enter"}
         >
           <div key={runId} className={`insight-list${afterActive ? " surfacing" : ""}`}>

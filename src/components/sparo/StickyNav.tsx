@@ -39,7 +39,7 @@ export function StickyNav() {
   return (
     <header className={`sparo-nav${visible ? " visible" : ""}`} aria-hidden={!visible}>
       <div className="nav-inner">
-        <a className="nav-mark" href="#top">
+        <a className="nav-mark" href="#top" tabIndex={visible ? 0 : -1}>
           Sparo
         </a>
         <nav aria-label="Section navigation">

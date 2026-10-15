@@ -227,6 +227,7 @@ body.sparo{
   color:var(--marigold);flex-shrink:0;
 }
 .sparo-nav ul{list-style:none;display:flex;gap:26px;overflow-x:auto;scrollbar-width:none;}
+.sparo-nav nav{min-width:0;}
 .sparo-nav ul::-webkit-scrollbar{display:none;}
 .sparo-nav a{
   font-family:var(--mono);font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;
@@ -250,6 +251,7 @@ body.sparo{
   min-height:96vh;display:flex;flex-direction:column;justify-content:center;
   padding-top:80px;padding-bottom:80px;border-bottom:1px solid var(--line);
 }
+.hero .wrap{width:100%;min-width:0;}
 .hero-top{
   display:flex;justify-content:space-between;align-items:flex-start;
   font-family:var(--mono);font-size:13px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.6;
