@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMagnetic } from "@/lib/motion";
+import { Button } from "@/components/ui/button";
 
 type Status = "idle" | "loading" | "error" | "done";
 
@@ -14,6 +15,7 @@ export function WaitlistForm() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (status === "loading") return;
     const value = email.trim().toLowerCase();
 
     if (!EMAIL_RE.test(value) || value.length > 255) {
@@ -66,7 +68,7 @@ export function WaitlistForm() {
         onSubmit={onSubmit}
         noValidate
       >
-        <label htmlFor="ctaEmail" className="sr-only" style={{ display: "none" }}>
+        <label htmlFor="ctaEmail" className="sr-only">
           Email address
         </label>
         <input
@@ -89,9 +91,10 @@ export function WaitlistForm() {
           inputMode="email"
           required
         />
-        <button ref={submitRef} type="submit" disabled={status === "loading"}>
-          {status === "loading" ? "Sending…" : "Get early access"}
-        </button>
+        <Button className="magnetic-cta" variant="ghost" ref={submitRef} type="submit" disabled={status === "loading"} aria-busy={status === "loading"}>
+          {status === "loading" && <span className="cta-spinner" aria-hidden="true" />}
+          <span>{status === "loading" ? "Sending…" : "Get early access"}</span>
+        </Button>
       </form>
       <p
         className={`cta-note${status === "error" ? " error" : ""}`}

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "@/lib/motion";
 
 const INTERACTIVE =
   "a, button, .price-card, .calc-action, .demo-tab, input[type='checkbox'], input[type='range']";
@@ -8,17 +9,22 @@ export function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const [enabled, setEnabled] = useState(false);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (reduced || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setEnabled(false);
+      return;
+    }
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     setEnabled(true);
 
     const onMove = (e: MouseEvent) => {
       const el = dotRef.current;
       if (el) el.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       const target = e.target as Element | null;
-      setActive(Boolean(target?.closest?.(INTERACTIVE)));
+      const control = target?.closest?.(INTERACTIVE);
+      setActive(Boolean(control && !control.matches(":disabled")));
     };
     const onLeave = () => setActive(false);
 
@@ -30,7 +36,7 @@ export function CustomCursor() {
       document.removeEventListener("mouseleave", onLeave);
       document.body.classList.remove("cursor-dot-on");
     };
-  }, []);
+  }, [reduced]);
 
   if (!enabled) return null;
 

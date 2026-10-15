@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { prefersReducedMotion } from "@/lib/motion";
+import { useReducedMotion } from "@/lib/motion";
 
 /**
  * Vertical stitched thread. Fills downward with scroll progress, reaching a
@@ -8,9 +8,10 @@ import { prefersReducedMotion } from "@/lib/motion";
  */
 export function ThreadLine() {
   const [progress, setProgress] = useState(0);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReducedMotion()) {
+    if (reduced) {
       setProgress(1);
       return;
     }
@@ -29,7 +30,7 @@ export function ThreadLine() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, []);
+  }, [reduced]);
 
   return (
     <div className="thread" aria-hidden="true">
