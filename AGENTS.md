@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep motion in the lightweight React hooks in `src/lib/motion.ts` and CSS; no animation library is needed for ledger interactions.
+- Render real numeric values initially and animate subsequent changes so SSR and slow JavaScript never produce placeholder zero totals.

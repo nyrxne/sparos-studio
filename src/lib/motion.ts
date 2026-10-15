@@ -26,14 +26,19 @@ export function useReducedMotion() {
  */
 export function useMagnetic<T extends HTMLElement>(max = 5) {
   const ref = useRef<T>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (prefersReducedMotion()) return;
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (reduced || prefersReducedMotion()) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
     const onMove = (e: MouseEvent) => {
+      if (el.matches(":disabled")) {
+        el.style.transform = "";
+        return;
+      }
       const r = el.getBoundingClientRect();
       const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
       const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
@@ -47,13 +52,15 @@ export function useMagnetic<T extends HTMLElement>(max = 5) {
     el.addEventListener("mousemove", onMove);
     el.addEventListener("mouseleave", onLeave);
     el.addEventListener("blur", onLeave);
+    el.addEventListener("click", onLeave);
     return () => {
       el.removeEventListener("mousemove", onMove);
       el.removeEventListener("mouseleave", onLeave);
       el.removeEventListener("blur", onLeave);
+      el.removeEventListener("click", onLeave);
       el.style.transform = "";
     };
-  }, [max]);
+  }, [max, reduced]);
 
   return ref;
 }

@@ -1,29 +1,31 @@
 import { useEffect, useRef, useState } from "react";
 
-import { prefersReducedMotion, useInView } from "@/lib/motion";
+import { useReducedMotion } from "@/lib/motion";
 
 function formatINR(n: number) {
   return "₹" + Math.round(n).toLocaleString("en-IN");
 }
 
 /** Animates a number toward `target` with easing, and flags a pulse on change. */
-function useAnimatedNumber(target: number, inView: boolean) {
-  const [display, setDisplay] = useState(0);
+function useAnimatedNumber(target: number) {
+  const [display, setDisplay] = useState(target);
   const [pulse, setPulse] = useState(false);
-  const fromRef = useRef(0);
+  const fromRef = useRef(target);
   const rafRef = useRef<number | null>(null);
   const pulseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
-    if (!inView) return;
-    if (prefersReducedMotion()) {
+    if (reduced) {
+      fromRef.current = target;
       setDisplay(target);
+      setPulse(false);
       return;
     }
     const from = fromRef.current;
     if (from === target) return;
     const start = performance.now();
-    const duration = 480;
+    const duration = 280;
 
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
@@ -38,12 +40,13 @@ function useAnimatedNumber(target: number, inView: boolean) {
 
     setPulse(true);
     if (pulseTimer.current) clearTimeout(pulseTimer.current);
-    pulseTimer.current = setTimeout(() => setPulse(false), 500);
+    pulseTimer.current = setTimeout(() => setPulse(false), 300);
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (pulseTimer.current) clearTimeout(pulseTimer.current);
     };
-  }, [target, inView]);
+  }, [target, reduced]);
 
   return { display, pulse };
 }
@@ -54,16 +57,14 @@ export function Calculator() {
   const [chase, setChase] = useState(false);
   const [discount, setDiscount] = useState(false);
 
-  const { ref, inView } = useInView<HTMLDivElement>(0.3);
-
   const trapped = invoices + inventory;
   const released = (chase ? invoices * 0.6 : 0) + (discount ? inventory * 0.7 : 0);
 
-  const trappedAnim = useAnimatedNumber(trapped, inView);
-  const releasedAnim = useAnimatedNumber(released, inView);
+  const trappedAnim = useAnimatedNumber(trapped);
+  const releasedAnim = useAnimatedNumber(released);
 
   return (
-    <div className="calc-panel" ref={ref}>
+    <div className="calc-panel">
       <div className="calc-grid">
         <div>
           <div className="calc-input">
@@ -102,14 +103,14 @@ export function Calculator() {
           </div>
         </div>
         <div className="calc-actions">
-          <label className="calc-action">
+          <label className={`calc-action${chase ? " selected" : ""}`}>
             <input type="checkbox" checked={chase} onChange={(e) => setChase(e.target.checked)} />
             <div>
               <div className="a-title">Chase the top overdue invoices this week</div>
               <div className="a-sub">Typically recovers ~60% of what's overdue</div>
             </div>
           </label>
-          <label className="calc-action">
+          <label className={`calc-action${discount ? " selected" : ""}`}>
             <input
               type="checkbox"
               checked={discount}
@@ -125,17 +126,20 @@ export function Calculator() {
       <div className="calc-result">
         <div className="r-block trapped">
           <div className="r-label">Cash trapped today</div>
-          <div className={`r-val${trappedAnim.pulse ? " pulse" : ""}`} aria-live="polite">
+          <div className={`r-val${trappedAnim.pulse ? " pulse" : ""}`} aria-hidden="true">
             {formatINR(trappedAnim.display)}
           </div>
         </div>
         <div className="r-block released">
           <div className="r-label">Protected if you act</div>
-          <div className={`r-val${releasedAnim.pulse ? " pulse" : ""}`} aria-live="polite">
+          <div className={`r-val${releasedAnim.pulse ? " pulse" : ""}`} aria-hidden="true">
             {formatINR(releasedAnim.display)}
           </div>
         </div>
       </div>
+      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        Cash trapped today: {formatINR(trapped)}. Protected if you act: {formatINR(released)}.
+      </p>
       <p className="calc-note">
         Illustrative recovery rates for this demo — not a prediction for any real business. Sparo's
         actual model learns each buyer's and each SKU's real pattern instead of a fixed percentage.

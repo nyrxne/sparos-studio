@@ -21,7 +21,7 @@ export function CountUp({
   className,
 }: Props) {
   const { ref, inView } = useInView<HTMLSpanElement>(0.4);
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
     if (!inView) return;
